@@ -1,0 +1,14 @@
+{
+  "name": "podcast-annotate",
+  "version": "1.0.0",
+  "description": "electron app to listen to and annotate podcasts",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^1.8.3"
+  }
+}
