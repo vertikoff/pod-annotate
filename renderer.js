@@ -93,6 +93,24 @@ function setPlayerControls(sound){
             newTS = 0;
         sound.seek(newTS);
     });
+
+		$('#note-field').keypress(function(){
+			var tsCurrent = sound.seek();
+			// CRV only add the note start time once
+			if(!$(this).attr('note-start'))
+				$(this).attr('note-start', tsCurrent);
+		});
+
+		$('#submit-note').click(function(){
+			var noteContent = $(this).siblings('#note-field').val();
+			var tsCurrent = sound.seek();
+			var noteStartTs = $(this).siblings('#note-field').attr('note-start');
+			console.log({
+				'note_start': noteStartTs,
+				'note_end': tsCurrent,
+				'note_content': noteContent
+			});
+		})
 }
 
 
