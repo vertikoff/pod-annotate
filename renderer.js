@@ -30,7 +30,6 @@ window.webContents.on('did-finish-load', function() {
 //	parsePodcastFeed("http://theknowledgeproject.libsyn.com/rss");
 
     parsePodcastFeed("https://rss.art19.com/the-daily");
-
 });
 
 function initializeButtonInstructions(){
@@ -66,14 +65,39 @@ function loadRemoteAudio(url, title){
 	});
 }
 
+function togglePlayPauseIcon(){
+	if($('#play').hasClass('play')){
+			$('#play').removeClass('play')
+			var classToAdd = 'fa-pause-circle';
+	}
+	else {
+			$('#play').addClass('play');
+			var classToAdd = 'fa-play-circle';
+	}
+	$('#play').empty().append('<i class="fas ' + classToAdd + '"></i>');
+	// if($('#play').hasClass('fa-play-circle')){
+	// 	$('#play').removeClass('fa-play-circle').addClass('fa-pause-circle');
+	// 	console.log('toggling to pause icon');
+	// }
+	// else {
+	// 	$('#play').removeClass('fa-pause-circle').addClass('fa-play-circle').addClass('play');
+	// 	console.log('toggling to play icon');
+	// }
+}
+
 function setPlayerControls(sound){
 	$('#play').click(function(){
-		sound.play();
+		if($(this).hasClass('play')){
+			sound.play();
+			togglePlayPauseIcon();
+		}
+		else{
+			sound.pause();
+			togglePlayPauseIcon();
+		}
+		updateCurrentTS(sound);
 	});
 
-	$('#pause').click(function(){
-		sound.pause();
-	});
 
 	$('#highlight').click(function(){
 		var tsHighlight = sound.seek();
@@ -93,8 +117,27 @@ function setPlayerControls(sound){
             newTS = 0;
         sound.seek(newTS);
     });
+
+		setInterval(function(){
+			updateCurrentTS(sound);
+		}, 1000);
 }
 
+function updateCurrentTS(soundObj){
+	currentTSRaw = soundObj.seek();
+	if(currentTSRaw == 0){
+		var cleanTS = "0:00";
+	} else{
+		console.log('min: ' + Math.floor(currentTSRaw/60));
+		console.log('sec: ' + currentTSRaw%60);
+		var secs = Math.round(currentTSRaw%60);
+		if(secs < 10)
+			secs = '0' + secs;
+		var cleanTS = Math.floor(currentTSRaw/60) + ':' + secs;
+	}
+
+	$('#current-ts').empty().append(cleanTS);
+}
 
 
 function parsePodcastFeed(url){
