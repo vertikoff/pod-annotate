@@ -180,8 +180,8 @@ function createNote(){
 
 function addNoteToDom(content, ts_start){
 	var html = "";
-	html += "<div class='note_in_dom' data-ts-raw='" + ts_start + "'>";
-	html += "<blockquote>" + content + "</blockquote>";
+	html += "<div class='note_in_dom bs-callout bs-callout-info' data-ts-raw='" + ts_start + "'>";
+	html += content;
 	// html += "<br>"
 	// // html += "<span>ts_start: " + ts_note_start + "</span>"
 	// // html += "<br><span>ts_end: " + ts_note_end +"</span>";
