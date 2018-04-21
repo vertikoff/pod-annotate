@@ -14,6 +14,14 @@
 <!-- normal script imports etc  -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
+<!-- bootstrap include -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href="style.css">
+<!-- Font awesome include -->
+<script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+
 <!-- Insert this line after script imports -->
 <script>if (window.module) module = window.module;</script>
 
@@ -30,13 +38,18 @@
   	<div id="audio-file-state"></div>
 
   	<div id="player-controls">
-	  	<button id="play" disabled="true">play</button>
-	  	<button id="pause" disabled="true">pause</button>
-	  	<button id="highlight" disabled="true">highlight</button>
-        <button id="skipback" disabled="true">back 30</button>
-        <button id="skipforward" disabled="true">forward 30</button>
+      <div id="play">
+        <i class="fas fa-play-circle"></i>
+      </div>
+      <span id="current-ts"></span>
+	  	<!-- <button id="play" class="btn" disabled="true">play</button> -->
+	  	<!-- <button id="pause" class="btn" disabled="true">pause</button> -->
+	  	<button id="highlight" class="btn" disabled="true">highlight</button>
+        <button id="skipback" class="btn" disabled="true">back 30</button>
+        <button id="skipforward" class="btn" disabled="true">forward 30</button>
   	</div>
   	<div id="info-pane"></div>
+    <input type="text" id="note-draft-field">
 
   </body>
 
