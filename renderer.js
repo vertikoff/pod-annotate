@@ -40,6 +40,8 @@ function initializeButtonInstructions(){
 	});
 }
 
+// CRV making Howler sound object global
+var sound;
 function loadRemoteAudio(url, title){
 	Howler.unload();
 
@@ -47,7 +49,7 @@ function loadRemoteAudio(url, title){
 		$(this).off();
 	});
 
-	var sound = new Howl({
+	sound = new Howl({
 	  src: url
 	});
 
@@ -85,6 +87,11 @@ function togglePlayPauseIcon(){
 	// }
 }
 
+function playAudioAtTS(ts){
+	sound.seek(ts);
+}
+
+
 function setPlayerControls(sound){
 	$('#play').click(function(){
 		if($(this).hasClass('play')){
@@ -98,10 +105,27 @@ function setPlayerControls(sound){
 		updateCurrentTS(sound);
 	});
 
+	//CRV detect that
+	$("#note-draft-field").bind("keyup paste", function() {
+		var current_note_start = $(this).attr('note_start_ts');
+		//CRV if there isn't already a timestamp of when the note started, lets set it
+		if (typeof current_note_start == typeof undefined || current_note_start == false){
+			$(this).attr('note_start_ts', sound.seek());
+			console.log('setting note_start_ts to: ' + sound.seek());
+		}
+	});
 
 	$('#highlight').click(function(){
-		var tsHighlight = sound.seek();
-		$('#info-pane').append("highlight added at: " + tsHighlight + "<br>");
+		var ts_note_end = sound.seek();
+		var ts_note_start = $('#note-draft-field').attr('note_start_ts');
+		var note_body = $('#note-draft-field').val();
+		var note_in_dom ="<div class='note_in_dom'><span>highlight added: " + note_body + "</span><br><span>ts_start: " + ts_note_start + "</span><br><span>ts_end: " + ts_note_end +
+		 "</span><br><button class='note'>Listen</button></div>";
+		var new_note = $(note_in_dom).appendTo('#info-pane');
+
+		 $(new_note).children('.note').click(function(){
+			playAudioAtTS(ts_note_start);
+		});
 	});
 
     $('#skipforward').click(function(){
@@ -128,8 +152,8 @@ function updateCurrentTS(soundObj){
 	if(currentTSRaw == 0){
 		var cleanTS = "0:00";
 	} else{
-		console.log('min: ' + Math.floor(currentTSRaw/60));
-		console.log('sec: ' + currentTSRaw%60);
+		// console.log('min: ' + Math.floor(currentTSRaw/60));
+		// console.log('sec: ' + currentTSRaw%60);
 		var secs = Math.round(currentTSRaw%60);
 		if(secs < 10)
 			secs = '0' + secs;
