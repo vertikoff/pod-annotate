@@ -16,6 +16,7 @@
 
 <!-- bootstrap include -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
 <link rel="stylesheet" href="style.css">
@@ -45,8 +46,23 @@
 	  	<!-- <button id="play" class="btn" disabled="true">play</button> -->
 	  	<!-- <button id="pause" class="btn" disabled="true">pause</button> -->
 	  	<button id="highlight" class="btn" disabled="true">highlight</button>
-        <button id="skipback" class="btn" disabled="true">back 30</button>
-        <button id="skipforward" class="btn" disabled="true">forward 30</button>
+      <button id="skipback" class="btn" disabled="true">back 30</button>
+      <button id="skipforward" class="btn" disabled="true">forward 30</button>
+      <button id="speed" class="btn" disabled="true" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-tachometer-alt"></i><sup id="current-speed">1.0</sup></button>
+        <ul class="dropdown-menu" aria-labelledby="speed">
+          <li><a href="#" class="playback-speed">0.5</a></li>
+          <li><a href="#" class="playback-speed">0.6</a></li>
+          <li><a href="#" class="playback-speed">0.7</a></li>
+          <li><a href="#" class="playback-speed">0.8</a></li>
+          <li><a href="#" class="playback-speed">0.9</a></li>
+          <li><a href="#" class="playback-speed">1.0</a></li>
+          <li><a href="#" class="playback-speed">1.2</a></li>
+          <li><a href="#" class="playback-speed">1.5</a></li>
+          <li><a href="#" class="playback-speed">2.0</a></li>
+          <li><a href="#" class="playback-speed">3.0</a></li>
+          <li><a href="#" class="playback-speed">4.0</a></li>
+        </ul>
+
   	</div>
     <input type="text" id="note-draft-field">
   	<div id="info-pane"></div>

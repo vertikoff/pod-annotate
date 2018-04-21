@@ -91,6 +91,11 @@ function playAudioAtTS(ts){
 	sound.seek(ts);
 }
 
+function setPlaybackSpeed(speed){
+	sound.rate(speed);
+	$('#current-speed').text(speed);
+}
+
 function resetNoteArea(){
 	$('#note-draft-field').val('').removeAttr('note_start_ts');
 	$('#note-draft-field').focus();
@@ -146,6 +151,11 @@ function setPlayerControls(sound){
             newTS = 0;
         sound.seek(newTS);
     });
+
+		$('.playback-speed').click(function(){
+			var speed = $(this).text();
+			setPlaybackSpeed(speed);
+		});
 
 		setInterval(function(){
 			updateCurrentTS(sound);
