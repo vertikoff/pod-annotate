@@ -91,6 +91,10 @@ function playAudioAtTS(ts){
 	sound.seek(ts);
 }
 
+function resetNoteArea(){
+	$('#note-draft-field').val('').removeAttr('note_start_ts');
+	$('#note-draft-field').focus();
+}
 
 function setPlayerControls(sound){
 	$('#play').click(function(){
@@ -126,6 +130,7 @@ function setPlayerControls(sound){
 		 $(new_note).children('.note').click(function(){
 			playAudioAtTS(ts_note_start);
 		});
+		resetNoteArea();
 	});
 
     $('#skipforward').click(function(){
