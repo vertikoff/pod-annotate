@@ -1,3 +1,6 @@
 #player-controls{
   margin: 15px;
 }
+#audio-duration{
+  float: right;
+}

@@ -55,6 +55,10 @@ function loadRemoteAudio(url, title){
 
 	$('#audio-file-state').text('downloading ' + title + '...');
 
+	var empty_progress_bar = '<div class="progress">';
+	empty_progress_bar += '<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>';
+	empty_progress_bar += '</div>';
+	$('#audio-progress').empty().append(empty_progress_bar);
 	// Clear listener after first call.
 	sound.once('load', function(){
 		$('#audio-file-state').text('ready to play!');
@@ -63,8 +67,14 @@ function loadRemoteAudio(url, title){
 		});
 
 		setPlayerControls(sound);
+		setDurationBadge();
 
 	});
+}
+
+function setDurationBadge(){
+	var duration = createReadableTS(sound.duration());
+	$('#audio-duration').text(duration);
 }
 
 function togglePlayPauseIcon(){
@@ -163,21 +173,35 @@ function setPlayerControls(sound){
 }
 
 function updateCurrentTS(soundObj){
-	currentTSRaw = soundObj.seek();
-	if(currentTSRaw == 0){
+	var currentTSRaw = sound.seek();
+	var cleanTS = createReadableTS(currentTSRaw);
+
+	$('#current-ts').empty().append(cleanTS);
+
+	updateProgressBar();
+}
+
+function createReadableTS(raw_ts){
+	if(raw_ts == 0){
 		var cleanTS = "0:00";
 	} else{
 		// console.log('min: ' + Math.floor(currentTSRaw/60));
 		// console.log('sec: ' + currentTSRaw%60);
-		var secs = Math.round(currentTSRaw%60);
+		var secs = Math.round(raw_ts%60);
 		if(secs < 10)
 			secs = '0' + secs;
-		var cleanTS = Math.floor(currentTSRaw/60) + ':' + secs;
+		var cleanTS = Math.floor(raw_ts/60) + ':' + secs;
 	}
-
-	$('#current-ts').empty().append(cleanTS);
+	return(cleanTS);
 }
 
+function updateProgressBar(){
+	var current_ts = sound.seek();
+	var end_ts = sound.duration();
+	var percentageComplete = current_ts/end_ts*100;
+	var progress_bar_update = '<div class="progress-bar" role="progressbar" style="width: ' + percentageComplete + '%" aria-valuenow="' + percentageComplete + '" aria-valuemin="0" aria-valuemax="100"></div>';
+	$('#audio-progress').children('.progress').empty().append(progress_bar_update);
+}
 
 function parsePodcastFeed(url){
 	request(url, (err, res, data) => {
