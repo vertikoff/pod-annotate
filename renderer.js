@@ -99,6 +99,7 @@ function togglePlayPauseIcon(){
 
 function playAudioAtTS(ts){
 	sound.seek(ts);
+	updateCurrentTS();
 }
 
 function setPlaybackSpeed(speed){
@@ -121,7 +122,7 @@ function setPlayerControls(sound){
 			sound.pause();
 			togglePlayPauseIcon();
 		}
-		updateCurrentTS(sound);
+		updateCurrentTS();
 	});
 
 	//CRV detect that
@@ -133,19 +134,15 @@ function setPlayerControls(sound){
 			console.log('setting note_start_ts to: ' + sound.seek());
 		}
 	});
+	$('#note-draft-field').keypress(function(e){
+		if(e.which == 13){
+			e.preventDefault();
+			createNote();
+		}
+	});
 
 	$('#highlight').click(function(){
-		var ts_note_end = sound.seek();
-		var ts_note_start = $('#note-draft-field').attr('note_start_ts');
-		var note_body = $('#note-draft-field').val();
-		var note_in_dom ="<div class='note_in_dom'><span>highlight added: " + note_body + "</span><br><span>ts_start: " + ts_note_start + "</span><br><span>ts_end: " + ts_note_end +
-		 "</span><br><button class='note'>Listen</button></div>";
-		var new_note = $(note_in_dom).appendTo('#info-pane');
-
-		 $(new_note).children('.note').click(function(){
-			playAudioAtTS(ts_note_start);
-		});
-		resetNoteArea();
+		createNote();
 	});
 
     $('#skipforward').click(function(){
@@ -168,11 +165,36 @@ function setPlayerControls(sound){
 		});
 
 		setInterval(function(){
-			updateCurrentTS(sound);
+			updateCurrentTS();
 		}, 1000);
 }
 
-function updateCurrentTS(soundObj){
+function createNote(){
+	var ts_note_end = sound.seek();
+	var ts_note_start = $('#note-draft-field').attr('note_start_ts');
+	var note_body = $('#note-draft-field').val();
+
+	addNoteToDom(note_body, ts_note_start);
+	resetNoteArea();
+}
+
+function addNoteToDom(content, ts_start){
+	var html = "";
+	html += "<div class='note_in_dom bs-callout bs-callout-info' data-ts-raw='" + ts_start + "'>";
+	html += content;
+	// html += "<br>"
+	// // html += "<span>ts_start: " + ts_note_start + "</span>"
+	// // html += "<br><span>ts_end: " + ts_note_end +"</span>";
+	// html += "<br>";
+	html += "</div>";
+	var note_in_dom = $(html).appendTo('#info-pane');
+	$(note_in_dom).click(function(){
+		var ts_note_start = $(this).attr('data-ts-raw');
+	 playAudioAtTS(ts_note_start);
+ });
+}
+
+function updateCurrentTS(){
 	var currentTSRaw = sound.seek();
 	var cleanTS = createReadableTS(currentTSRaw);
 
