@@ -18,6 +18,9 @@ document.getElementById("close-btn").addEventListener("click", function (e) {
 */
 // End code to add custom close button
 
+var baseUrl = "http://127.0.0.1:5003";
+
+
 var window = remote.getCurrentWindow();
 window.webContents.on('did-finish-load', function() {
 
@@ -42,7 +45,7 @@ function initializeButtonInstructions(){
 
 // CRV making Howler sound object global
 var sound;
-function loadRemoteAudio(url, title){
+function loadRemoteAudio(url, title, guid){
 	Howler.unload();
 
 	$('#player-controls button').each(function(){
@@ -53,7 +56,15 @@ function loadRemoteAudio(url, title){
 	  src: url
 	});
 
-	$('#audio-file-state').text('downloading ' + title + '...');
+	// $('#audio-file-state').text('downloading ' + title + '...');
+
+	// CRV set guid
+	$('#note-draft-field').attr('data-guid', guid);
+	$('#note-draft-field').attr('data-title', title);
+	$('#note-draft-field').attr('data-media-src', url);
+
+	//CRV fetch previous notes for pod
+	getNotes(guid);
 
 	var empty_progress_bar = '<div class="progress">';
 	empty_progress_bar += '<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>';
@@ -170,11 +181,17 @@ function setPlayerControls(sound){
 }
 
 function createNote(){
-	var ts_note_end = sound.seek();
-	var ts_note_start = $('#note-draft-field').attr('note_start_ts');
-	var note_body = $('#note-draft-field').val();
+	var media_id = $('#note-draft-field').attr('data-guid');
+	var media_src = $('#note-draft-field').attr('data-media-src');
+	var media_title = $('#note-draft-field').attr('data-title');
+	var media_img = $('.pod-image').attr('src');
+	var ts_start = $('#note-draft-field').attr('note_start_ts');
+	var ts_end = sound.seek();
+	var body = $('#note-draft-field').val();
 
-	addNoteToDom(note_body, ts_note_start);
+
+	addNote(media_id, media_src, media_title, media_img, ts_start, ts_end, body);
+	addNoteToDom(body, ts_start);
 	resetNoteArea();
 }
 
@@ -237,7 +254,7 @@ function parsePodcastFeed(url){
 	      console.error('Parsing error', err);
 	      return;
 	    }
-
+			console.log('podcast feed:');
 	    console.log(data);
 	    buildPodCastEpisodeSelectionUI(data);
 	  });
@@ -253,7 +270,7 @@ function buildPodCastEpisodeSelectionUI(data){
 	html += '<span class="pod-title">' + podTitle + '</span>'
 	html += '<select class="episode-selector">';
 	$.each(data.episodes, function(){
-		html += '<option value="' + this.enclosure.url + '" data-title="' + this.title + '">' + this.title + '</option>';
+		html += '<option value="' + this.enclosure.url + '" data-title="' + this.title + '" data-guid="' + this.guid + '">' + this.title + '</option>';
 	});
 	html += '</select>';
 	html += '</div>';
@@ -261,11 +278,73 @@ function buildPodCastEpisodeSelectionUI(data){
 	var podInDom = $(html).appendTo('body');
 
   // load first episode
-  loadRemoteAudio(data.episodes[0]["enclosure"]["url"], data.episodes[0]["title"]);
+  loadRemoteAudio(data.episodes[0]["enclosure"]["url"], data.episodes[0]["title"], data.episodes[0]["guid"]);
 
 	$(podInDom).find('.episode-selector').change(function(){
 		var episodeURL = this.value;
     var epTitle = $(this).find(':selected').data('title');
-		loadRemoteAudio(episodeURL, epTitle);
+		var epGuid = $(this).find(':selected').data('guid');
+		loadRemoteAudio(episodeURL, epTitle, epGuid);
 	});
+}
+
+function getNotes(media_id){
+	$.ajax({
+			type: "POST",
+			url: baseUrl + "/api/get_notes/",
+			dataType: "json",
+			contentType: 'application/json',
+			xhrFields: { withCredentials: true},
+			data: JSON.stringify({"media_id": media_id}),
+			success: function(json_data,textStatus,jqXHR){
+				console.log('===== notes fetched ======');
+				console.log(json_data);
+				if(json_data.status ==1){
+					addExistingNotesToDom(json_data.media_data);
+				}
+			},
+			error: function(json_data,textStatus,jqXHR){
+				console.log('notes NOT fetched ======');
+				console.log(json_data);
+			}
+	});
+}
+
+function addNote(media_id, media_src, media_title, media_img, ts_start, ts_end, body){
+	var postData = {
+		"media_id": media_id,
+		"media_src": media_src,
+		"media_title": media_title,
+		"media_img": media_img,
+		"ts_start": ts_start,
+		"ts_end": ts_end,
+		"body": body
+	};
+	console.log(postData);
+	$.ajax({
+			type: "POST",
+			url: baseUrl + "/api/add_note",
+			dataType: "json",
+			contentType: 'application/json',
+			xhrFields: { withCredentials: true},
+			data: JSON.stringify(postData),
+			success: function(json_data,textStatus,jqXHR){
+				console.log('note added');
+				console.log(json_data);
+			},
+			error: function(json_data,textStatus,jqXHR){
+				console.log('note NOT added');
+				console.log(json_data);
+			}
+	});
+}
+
+function addExistingNotesToDom(media_info){
+	console.log(media_info);
+	var i = 0;
+	for(var i=0; i < media_info.body.length; i++){
+		var body = media_info.body[i];
+		var ts_start = media_info.ts_start[i];
+		addNoteToDom(body, ts_start);
+	}
 }
