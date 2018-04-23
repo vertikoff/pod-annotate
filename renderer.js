@@ -230,7 +230,7 @@ function updateCurrentTS(){
 }
 
 function createReadableTS(raw_ts){
-	if(raw_ts == 0){
+	if(raw_ts < 1){
 		var cleanTS = "0:00";
 	} else{
 		// console.log('min: ' + Math.floor(currentTSRaw/60));
