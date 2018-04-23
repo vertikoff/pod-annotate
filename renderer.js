@@ -110,7 +110,16 @@ function togglePlayPauseIcon(){
 
 function playAudioAtTS(ts){
 	sound.seek(ts);
+	customPlayAudio();
 	updateCurrentTS();
+}
+
+function customPlayAudio(){
+	sound.play();
+	// CRV only need to toggle the play icon if the audio was paused before this
+	if($('#play').hasClass('play')){
+		togglePlayPauseIcon();
+	}
 }
 
 function setPlaybackSpeed(speed){
