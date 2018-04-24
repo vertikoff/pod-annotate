@@ -129,8 +129,9 @@ function setPlaybackSpeed(speed){
 }
 
 function resetNoteArea(){
-	$('#note-draft-field').val('').removeAttr('note_start_ts');
 	$('#note-draft-field').focus();
+	$('#note-draft-field').val('').removeAttr('note_start_ts');
+	// $('#ts_test').empty();
 }
 
 function setPlayerControls(sound){
@@ -147,12 +148,14 @@ function setPlayerControls(sound){
 	});
 
 	//CRV detect that
-	$("#note-draft-field").bind("keyup paste", function() {
+	$("#note-draft-field").bind("keydown paste", function() {
 		var current_note_start = $(this).attr('note_start_ts');
 		//CRV if there isn't already a timestamp of when the note started, lets set it
 		if (typeof current_note_start == typeof undefined || current_note_start == false){
-			$(this).attr('note_start_ts', sound.seek());
-			console.log('setting note_start_ts to: ' + sound.seek());
+			var current_ts = sound.seek();
+			$(this).attr('note_start_ts', current_ts);
+			// $('#ts_test').text(current_ts);
+			console.log('setting note_start_ts to: ' + current_ts);
 		}
 	});
 	$('#note-draft-field').keypress(function(e){
