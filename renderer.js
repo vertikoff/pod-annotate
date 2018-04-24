@@ -24,7 +24,7 @@ var baseUrl = "http://127.0.0.1:5003";
 var window = remote.getCurrentWindow();
 window.webContents.on('did-finish-load', function() {
 
-	initializeButtonInstructions();
+	// initializeButtonInstructions();
 
 
 //	parsePodcastFeed("http://timferriss.libsyn.com/rss");
@@ -35,13 +35,13 @@ window.webContents.on('did-finish-load', function() {
     parsePodcastFeed("https://rss.art19.com/the-daily");
 });
 
-function initializeButtonInstructions(){
-	$('#select-audio').click(function(){
-		var audioSrc = $('#audio-url').val();
-    var epTitle = $('#audio-url').find(':selected').data('title');
-		loadRemoteAudio(audioSrc, epTitle);
-	});
-}
+// function initializeButtonInstructions(){
+// 	$('#select-audio').click(function(){
+// 		var audioSrc = $('#audio-url').val();
+//     var epTitle = $('#audio-url').find(':selected').data('title');
+// 		loadRemoteAudio(audioSrc, epTitle);
+// 	});
+// }
 
 // CRV making Howler sound object global
 var sound;
@@ -72,7 +72,7 @@ function loadRemoteAudio(url, title, guid){
 	$('#audio-progress').empty().append(empty_progress_bar);
 	// Clear listener after first call.
 	sound.once('load', function(){
-		$('#audio-file-state').text('ready to play!');
+		// $('#audio-file-state').text('ready to play!');
 		$('#player-controls button').each(function(){
 			$(this).removeAttr('disabled');
 		});
