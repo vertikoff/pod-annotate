@@ -91,11 +91,11 @@ function setDurationBadge(){
 function togglePlayPauseIcon(){
 	if($('#play').hasClass('play')){
 			$('#play').removeClass('play')
-			var classToAdd = 'fa-pause-circle';
+			var classToAdd = 'fa-pause';
 	}
 	else {
 			$('#play').addClass('play');
-			var classToAdd = 'fa-play-circle';
+			var classToAdd = 'fa-play';
 	}
 	$('#play').empty().append('<i class="fas ' + classToAdd + '"></i>');
 	// if($('#play').hasClass('fa-play-circle')){
