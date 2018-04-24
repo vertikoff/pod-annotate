@@ -200,11 +200,11 @@ function createNote(){
 
 
 	addNote(media_id, media_src, media_title, media_img, ts_start, ts_end, body);
-	addNoteToDom(body, ts_start);
+	addNoteToDom(body, ts_start, media_id);
 	resetNoteArea();
 }
 
-function addNoteToDom(content, ts_start){
+function addNoteToDom(content, ts_start, media_id){
 	var html = "";
 	html += "<div class='note_in_dom bs-callout bs-callout-info' data-ts-raw='" + ts_start + "'>";
 	html += content;
@@ -212,12 +212,20 @@ function addNoteToDom(content, ts_start){
 	// // html += "<span>ts_start: " + ts_note_start + "</span>"
 	// // html += "<br><span>ts_end: " + ts_note_end +"</span>";
 	// html += "<br>";
+	html += '<button type="button" class="close" aria-label="Close">';
+  html += '<span aria-hidden="true">&times;</span>';
+	html += '</button>';
 	html += "</div>";
 	var note_in_dom = $(html).appendTo('#info-pane');
+ $(note_in_dom).find('.close').click(function(event){
+	 event.stopPropagation();
+		var ts_note_start = $(this).parent().attr('data-ts-raw');
+		deleteNote(media_id, ts_note_start);
+	});
 	$(note_in_dom).click(function(){
 		var ts_note_start = $(this).attr('data-ts-raw');
-	 playAudioAtTS(ts_note_start);
- });
+	 	playAudioAtTS(ts_note_start);
+ 	});
 }
 
 function updateCurrentTS(){
@@ -309,7 +317,7 @@ function getNotes(media_id){
 				console.log('===== notes fetched ======');
 				console.log(json_data);
 				if(json_data.status ==1){
-					addExistingNotesToDom(json_data.media_data);
+					addExistingNotesToDom(json_data.media_data, media_id);
 				}
 			},
 			error: function(json_data,textStatus,jqXHR){
@@ -348,12 +356,39 @@ function addNote(media_id, media_src, media_title, media_img, ts_start, ts_end, 
 	});
 }
 
-function addExistingNotesToDom(media_info){
+function deleteNote(media_id, ts_start){
+	var postData = {
+		"media_id": media_id,
+		"ts_start": ts_start
+	};
+	console.log(postData);
+	$.ajax({
+			type: "POST",
+			url: baseUrl + "/api/delete_note",
+			dataType: "json",
+			contentType: 'application/json',
+			xhrFields: { withCredentials: true},
+			data: JSON.stringify(postData),
+			success: function(json_data,textStatus,jqXHR){
+				console.log('note DELETED');
+				console.log(json_data);
+				if(json_data.status == 1){
+					$('#info-pane').find("[data-ts-raw='" + ts_start + "']").remove()
+				}
+			},
+			error: function(json_data,textStatus,jqXHR){
+				console.log('note NOT deleted');
+				console.log(json_data);
+			}
+	});
+}
+
+function addExistingNotesToDom(media_info, media_id){
 	console.log(media_info);
 	var i = 0;
 	for(var i=0; i < media_info.body.length; i++){
 		var body = media_info.body[i];
 		var ts_start = media_info.ts_start[i];
-		addNoteToDom(body, ts_start);
+		addNoteToDom(body, ts_start, media_id);
 	}
 }
