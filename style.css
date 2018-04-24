@@ -4,6 +4,13 @@
 #audio-duration{
   float: right;
 }
+.round_button{
+  border-radius: 50%;
+}
+
+#player-header{
+  -webkit-app-region:drag;
+}
 
 .btn:focus {outline: none;box-shadow: none;border:1px solid transparent;}
 
