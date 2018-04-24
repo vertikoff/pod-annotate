@@ -5,6 +5,8 @@
   float: right;
 }
 
+.btn:focus {outline: none;box-shadow: none;border:1px solid transparent;}
+
 .bs-callout {
     padding: 20px;
     margin: 20px 0;
