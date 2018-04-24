@@ -252,6 +252,10 @@ function createReadableTS(raw_ts){
 			secs = '0' + secs;
 		var cleanTS = Math.floor(raw_ts/60) + ':' + secs;
 	}
+	//CRV one final check to ensure we never display "NaN:NaN" timestamp
+	if(cleanTS.indexOf('NaN') > -1){
+		cleanTS = "0:00";
+	}
 	return(cleanTS);
 }
 
