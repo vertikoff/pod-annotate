@@ -177,7 +177,7 @@ function setPlayerControls(sound){
 
     $('#skipback').click(function(){
         var tsCurrent = sound.seek();
-        var newTS = tsCurrent - 30;
+        var newTS = tsCurrent - 5;
         if(newTS < 0)
             newTS = 0;
         sound.seek(newTS);
@@ -220,7 +220,7 @@ function addNoteToDom(content, ts_start, media_id){
   html += '<span aria-hidden="true">&times;</span>';
 	html += '</button>';
 	html += "</div>";
-	var note_in_dom = $(html).appendTo('#info-pane');
+	var note_in_dom = $(html).appendTo('#notes_holder');
  $(note_in_dom).find('.close').click(function(event){
 	 event.stopPropagation();
 		var ts_note_start = $(this).parent().attr('data-ts-raw');
@@ -289,6 +289,7 @@ function parsePodcastFeed(url){
 function buildPodCastEpisodeSelectionUI(data){
 	var podImage = data.image;
 	var podTitle = data.title;
+	$('.pod-image').attr('src', podImage);
 
 	var html = '<div class="pod-holder">';
 	html += '<img class="pod-image" style="width:100px;" src="' + podImage + '">';
@@ -304,6 +305,13 @@ function buildPodCastEpisodeSelectionUI(data){
 
   // load first episode
   loadRemoteAudio(data.episodes[0]["enclosure"]["url"], data.episodes[0]["title"], data.episodes[0]["guid"]);
+	$('#media_title').html(podTitle);
+	$('#media_subtitle').empty().html(data.episodes[0]["title"]);
+	var tooltipOptions = {
+		'title': data.episodes[0]["description"],
+		'placement': 'auto'
+	};
+	$('#media_subtitle').tooltip(tooltipOptions);
 
 	$(podInDom).find('.episode-selector').change(function(){
 		var episodeURL = this.value;
@@ -381,7 +389,7 @@ function deleteNote(media_id, ts_start){
 				console.log('note DELETED');
 				console.log(json_data);
 				if(json_data.status == 1){
-					$('#info-pane').find("[data-ts-raw='" + ts_start + "']").remove()
+					$('#notes_holder').find("[data-ts-raw='" + ts_start + "']").remove()
 				}
 			},
 			error: function(json_data,textStatus,jqXHR){

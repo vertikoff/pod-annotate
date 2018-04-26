@@ -38,9 +38,9 @@
     <div id="player-header">
     	<div id="player-controls">
         <button id="play" class="play btn round_button btn-primary" disabled="true"><i class="fas fa-play"></i></button>
-        <button id="skipback" class="btn btn-dark" disabled="true"><i class="fas fa-undo-alt"></i></button>
-        <button id="skipforward" class="btn btn-dark" disabled="true"><i class="fas fa-redo-alt"></i></button>
-        <button id="speed" class="btn btn-dark" disabled="true" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-tachometer-alt"></i><sup id="current-speed">1.0</sup></button>
+        <button id="skipback" class="btn btn-dark" disabled="true"><i class="fas fa-undo-alt"></i><sup class="sup-text">5</sup></button>
+        <button id="skipforward" class="btn btn-dark" disabled="true"><i class="fas fa-redo-alt"></i><sup class="sup-text">30</sup></button>
+        <button id="speed" class="btn btn-dark" disabled="true" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-tachometer-alt"></i><sup id="current-speed" class="sup-text">1.0</sup></button>
           <ul class="dropdown-menu" aria-labelledby="speed">
             <li><a href="#" class="playback-speed">0.5</a></li>
             <li><a href="#" class="playback-speed">0.6</a></li>
@@ -57,6 +57,13 @@
 
     	</div>
       <div id="media_info">
+        <img class="pod-image">
+        <div class="inline-div">
+          <span id="media_title"></span>
+          <span id="media_subtitle"></span>
+        </div>
+      </div>
+      <div id="track_info">
         <span id="current-ts">0:00</span>
         <span id="audio-duration"></span>
         <div id="audio-progress">
@@ -65,10 +72,10 @@
         </div>
       </div>
   </div>
+  <div id="notes_area">
+    <div id="notes_holder"></div>
     <input type="text" id="note-draft-field">
-    <!-- <span id="ts_test"></span> -->
-  	<div id="info-pane"></div>
-
+  </div>
   </body>
 
   <script>
