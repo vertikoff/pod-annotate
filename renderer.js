@@ -19,20 +19,27 @@ document.getElementById("close-btn").addEventListener("click", function (e) {
 // End code to add custom close button
 
 var baseUrl = "http://127.0.0.1:5003";
-
+var pods = {
+	"name": ["The Daily", "The Tim Ferriss Show"],
+	"image": ["https://dfkfj8j276wwv.cloudfront.net/images/01/1b/f3/d6/011bf3d6-a448-4533-967b-e2f19e376480/7fdd4469c1b5cb3b66aa7dcc9fa21f138efe9a0310a8a269f3dcd07c83a552844fcc445ea2d53db1e55d6fb077aeaa8a1566851f8f2d8ac4349d9d23a87a69f5.jpeg",
+						"https://dfkfj8j276wwv.cloudfront.net/images/69/10/10/fb/691010fb-625e-4abe-993c-a57228b28dbe/91cb53ae0d5dbb379b9dffecf0a772593891d0d09bbe6d90ee746edbdb79e3ec75584f2ceb8260e9f675a90c05419b9b99842a76905b686f0f51c1a9d3e227ab.jpeg"],
+	"feed": ["https://rss.art19.com/the-daily", "http://timferriss.libsyn.com/rss"]
+};
+console.log(pods);
 
 var window = remote.getCurrentWindow();
 window.webContents.on('did-finish-load', function() {
 
 	// initializeButtonInstructions();
 
-
-//	parsePodcastFeed("http://timferriss.libsyn.com/rss");
+	buildMediaLeftNav();
+	//CRV this is where the code base used to start
+	//parsePodcastFeed("http://timferriss.libsyn.com/rss");
 
 
 //	parsePodcastFeed("http://theknowledgeproject.libsyn.com/rss");
 
-    parsePodcastFeed("https://rss.art19.com/the-daily");
+//    parsePodcastFeed("https://rss.art19.com/the-daily");
 });
 
 // function initializeButtonInstructions(){
@@ -42,6 +49,22 @@ window.webContents.on('did-finish-load', function() {
 // 		loadRemoteAudio(audioSrc, epTitle);
 // 	});
 // }
+
+function buildMediaLeftNav(){
+	var html = '';
+	for(var i=0; i < pods.name.length; i++){
+		html += '<div class="media-holder" data-rss="' + pods.feed[i] + '">';
+		html += '<img class="media-list-img" src="' + pods.image[i] + '">';
+		html += '<span class="media-list-title">' + pods.name[i] + '</span>';
+		html += '</div>';
+	}
+	var mediaInDom = $(html).appendTo('#media-feed');
+	$(mediaInDom).parent().children('.media-holder').click(function(){
+		var rssFeed = $(this).attr('data-rss');
+		parsePodcastFeed(rssFeed);
+	});
+}
+
 
 // CRV making Howler sound object global
 var sound;
