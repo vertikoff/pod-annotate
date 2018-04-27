@@ -22,10 +22,24 @@ body{
   width: 40px;
   margin-right: 10px;
 }
+.media-holder .up-icon-holder, .media-holder .down-icon-holder{
+  float:right;
+}
+.media-holder .up-icon-holder{
+  display: none;
+}
 .media-list-title{
   font-size: 12px;
   vertical-align: top;
   font-weight: bold;
+}
+.episodes{
+  height: 200px;
+  overflow-y: scroll;
+  display: none;
+}
+.episode{
+  padding: 10px 0px;
 }
 #audio-duration{
   float: right;
