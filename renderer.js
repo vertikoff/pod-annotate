@@ -349,6 +349,7 @@ function buildPodCastEpisodeSelectionUI(data, url){
 }
 
 function getNotes(media_id){
+	$('#notes_holder').empty().append('<span class="loading-spinner"><i class="fas fa-spinner fa-pulse"></i></span>');
 	$.ajax({
 			type: "POST",
 			url: baseUrl + "/api/get_notes/",
@@ -359,11 +360,13 @@ function getNotes(media_id){
 			success: function(json_data,textStatus,jqXHR){
 				console.log('===== notes fetched ======');
 				console.log(json_data);
+				$('#notes_holder').empty();
 				if(json_data.status ==1){
 					addExistingNotesToDom(json_data.media_data, media_id);
 				}
 			},
 			error: function(json_data,textStatus,jqXHR){
+				$('#notes_holder').empty();
 				console.log('notes NOT fetched ======');
 				console.log(json_data);
 			}
