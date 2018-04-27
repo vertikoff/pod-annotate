@@ -41,6 +41,13 @@ body{
 .episode{
   padding: 10px 0px;
 }
+.loading-spinner{
+  text-align: center;
+  width: 100%;
+  display: inline-block;
+  font-size: 40px;
+  margin-top: 40px;
+}
 #audio-duration{
   float: right;
 }
