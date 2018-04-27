@@ -56,10 +56,13 @@ function buildMediaLeftNav(){
 		html += '<div class="media-holder" data-rss="' + pods.feed[i] + '">';
 		html += '<img class="media-list-img" src="' + pods.image[i] + '">';
 		html += '<span class="media-list-title">' + pods.name[i] + '</span>';
+		html += '<span class="up-icon-holder"><i class="fas fa-angle-up"></i></span>';
+		html += '<span class="down-icon-holder"><i class="fas fa-cog fa-spin"></i></span>';
+		html += '<div class="episodes"></div>';
 		html += '</div>';
 	}
 	var mediaInDom = $(html).appendTo('#media-feed');
-	$(mediaInDom).parent().children('.media-holder').click(function(){
+	$(mediaInDom).parent().children('.media-holder').each(function(){
 		var rssFeed = $(this).attr('data-rss');
 		parsePodcastFeed(rssFeed);
 	});
@@ -68,7 +71,15 @@ function buildMediaLeftNav(){
 
 // CRV making Howler sound object global
 var sound;
-function loadRemoteAudio(url, title, guid){
+function loadRemoteAudio(url, title, guid, desc){
+
+	$('#media_subtitle').empty().html(title);
+	var tooltipOptions = {
+	 	'title': desc,
+	 	'placement': 'auto'
+	};
+	$('#media_subtitle').tooltip(tooltipOptions);
+
 	Howler.unload();
 
 	$('#player-controls button').each(function(){
@@ -304,44 +315,37 @@ function parsePodcastFeed(url){
 	    }
 			console.log('podcast feed:');
 	    console.log(data);
-	    buildPodCastEpisodeSelectionUI(data);
+	    buildPodCastEpisodeSelectionUI(data, url);
 	  });
 	});
 }
 
-function buildPodCastEpisodeSelectionUI(data){
-	var podImage = data.image;
-	var podTitle = data.title;
-	$('.pod-image').attr('src', podImage);
+function buildPodCastEpisodeSelectionUI(data, url){
+	// var podImage = data.image;
+	// var podTitle = data.title;
+	// $('.pod-image').attr('src', podImage);
 
-	var html = '<div class="pod-holder">';
-	html += '<img class="pod-image" style="width:100px;" src="' + podImage + '">';
-	html += '<span class="pod-title">' + podTitle + '</span>'
-	html += '<select class="episode-selector">';
+	var html = '<div class="episode-holder">';
 	$.each(data.episodes, function(){
-		html += '<option value="' + this.enclosure.url + '" data-title="' + this.title + '" data-guid="' + this.guid + '">' + this.title + '</option>';
+		html += '<div class="episode" data-src="' + this.enclosure.url + '" data-title="' + this.title + '" data-guid="' + this.guid + '" data-description="' + this.description + '">' + this.title + '</div>';
 	});
-	html += '</select>';
 	html += '</div>';
 
-	var podInDom = $(html).appendTo('body');
-
-  // load first episode
-  loadRemoteAudio(data.episodes[0]["enclosure"]["url"], data.episodes[0]["title"], data.episodes[0]["guid"]);
-	$('#media_title').html(podTitle);
-	$('#media_subtitle').empty().html(data.episodes[0]["title"]);
-	var tooltipOptions = {
-		'title': data.episodes[0]["description"],
-		'placement': 'auto'
-	};
-	$('#media_subtitle').tooltip(tooltipOptions);
-
-	$(podInDom).find('.episode-selector').change(function(){
-		var episodeURL = this.value;
-    var epTitle = $(this).find(':selected').data('title');
-		var epGuid = $(this).find(':selected').data('guid');
-		loadRemoteAudio(episodeURL, epTitle, epGuid);
+	var targetMediaParent = $('#media-feed').find("[data-rss='" + url + "']").children('.episodes');
+	$(targetMediaParent).siblings('.down-icon-holder').empty().append('<i class="fas fa-angle-down"></i>');
+	var episodesInDom = $(html).appendTo(targetMediaParent);
+	$(episodesInDom).children('.episode').click(function(event){
+		event.stopPropagation();
+		$('#media_info').children('.pod-image').attr('src', $(this).parent().parent().siblings('img').attr('src'));
+		$('#media_title').empty().append($(this).parent().parent().siblings('.media-list-title').html());
+		loadRemoteAudio($(this).attr('data-src'), $(this).attr('data-title'), $(this).attr('data-guid'), $(this).attr('data-description'));
 	});
+
+	$(episodesInDom).parent().parent().click(function(){
+		$(this).children('.episodes').toggle();
+		$(this).children('.up-icon-holder').toggle();
+		$(this).children('.down-icon-holder').toggle();
+	})
 }
 
 function getNotes(media_id){
