@@ -68,9 +68,9 @@ function buildMediaLeftNav(){
 	});
 }
 
-
 // CRV making Howler sound object global
 var sound;
+var tsUpdateInterval = false;
 function loadRemoteAudio(url, title, guid, desc){
 
 	$('#media_subtitle').empty().html(title);
@@ -80,7 +80,18 @@ function loadRemoteAudio(url, title, guid, desc){
 	};
 	$('#media_subtitle').tooltip(tooltipOptions);
 
+	//CRV reset the media player area
+	//CRV if audio is currently playing, pause it before updating the contentType
+	if(!$('#play').hasClass('play')){
+		togglePlayPauseIcon();
+	}
+
 	Howler.unload();
+	killTSUpdateInterval();
+	$('#current-ts').empty().append("0:00");
+	$('#audio-duration').empty();
+
+
 
 	$('#player-controls button').each(function(){
 		$(this).off();
@@ -100,6 +111,7 @@ function loadRemoteAudio(url, title, guid, desc){
 	//CRV fetch previous notes for pod
 	getNotes(guid);
 
+	console.error('setting striped progress bar');
 	var empty_progress_bar = '<div class="progress">';
 	empty_progress_bar += '<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>';
 	empty_progress_bar += '</div>';
@@ -109,6 +121,8 @@ function loadRemoteAudio(url, title, guid, desc){
 		// $('#audio-file-state').text('ready to play!');
 		$('#player-controls button').each(function(){
 			$(this).removeAttr('disabled');
+			console.error('audio loaded');
+			console.error(sound);
 		});
 
 		setPlayerControls(sound);
@@ -116,6 +130,16 @@ function loadRemoteAudio(url, title, guid, desc){
 
 	});
 }
+
+function killTSUpdateInterval(){
+	if(tsUpdateInterval !== false){
+		console.error('removing ts_interval');
+		clearInterval(tsUpdateInterval);
+		tsUpdateInterval = false;
+	}
+}
+
+
 
 function setDurationBadge(){
 	var duration = createReadableTS(sound.duration());
@@ -222,9 +246,11 @@ function setPlayerControls(sound){
 			setPlaybackSpeed(speed);
 		});
 
-		setInterval(function(){
+		tsUpdateInterval = setInterval(function(){
+			console.log('interval ts update');
 			updateCurrentTS();
 		}, 1000);
+		console.error('tsUpdateInterval: ' + tsUpdateInterval);
 }
 
 function createNote(){
