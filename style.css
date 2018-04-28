@@ -147,6 +147,17 @@ body{
   overflow-x: scroll;
   max-height: 80%;
 }
+
+::-webkit-scrollbar {
+        background-color: #fff;
+        width: 5px;
+}
+
+::-webkit-scrollbar-thumb:window-inactive,
+::-webkit-scrollbar-thumb {
+        background:  #007bff;
+}
+
 .btn:focus {outline: none;box-shadow: none;border:1px solid transparent;}
 
 .bs-callout {
