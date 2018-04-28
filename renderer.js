@@ -18,7 +18,7 @@ document.getElementById("close-btn").addEventListener("click", function (e) {
 */
 // End code to add custom close button
 
-var baseUrl = "http://127.0.0.1:5003";
+var baseUrl = "http:vcm-3581.vm.duke.edu:5003";
 var pods = {
 	"name": ["The Daily",
 	         "The Tim Ferriss Show",
