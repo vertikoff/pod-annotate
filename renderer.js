@@ -121,13 +121,11 @@ function loadRemoteAudio(url, title, guid, desc){
 		// $('#audio-file-state').text('ready to play!');
 		$('#player-controls button').each(function(){
 			$(this).removeAttr('disabled');
-			console.error('audio loaded');
-			console.error(sound);
 		});
 
 		setPlayerControls(sound);
 		setDurationBadge();
-
+		customPlayAudio();
 	});
 }
 
