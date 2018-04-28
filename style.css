@@ -111,6 +111,9 @@ body{
   text-overflow: ellipsis;
   font-size: 12px;
 }
+#media_subtitle:hover{
+  cursor: pointer;
+}
 #media_subtitle > .fa-question-circle{
   color: #bbbbbb;
   margin-left:10px;
@@ -140,6 +143,10 @@ body{
   width: 98%;
 }
 
+.tooltip{
+  overflow-x: scroll;
+  max-height: 80%;
+}
 .btn:focus {outline: none;box-shadow: none;border:1px solid transparent;}
 
 .bs-callout {

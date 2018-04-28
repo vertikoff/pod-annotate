@@ -76,8 +76,12 @@ function loadRemoteAudio(url, title, guid, desc){
 	$('#media_subtitle').empty().html(title);
 	var tooltipOptions = {
 	 	'title': desc,
-	 	'placement': 'auto'
+	 	'placement': 'auto',
+		'trigger': 'click'
 	};
+
+	//CRV remove any tooltips that might already be attached to the desc
+	$('#media_subtitle').tooltip('dispose');
 	$('#media_subtitle').tooltip(tooltipOptions);
 
 	//CRV reset the media player area
@@ -168,7 +172,6 @@ function playAudioAtTS(ts){
 	console.log('updating TS to: ' + ts);
 	sound.seek(ts);
 	customPlayAudio();
-	updateCurrentTS();
 }
 
 function customPlayAudio(){
@@ -176,6 +179,7 @@ function customPlayAudio(){
 	if($('#play').hasClass('play')){
 		sound.play();
 		togglePlayPauseIcon();
+		updateCurrentTS();
 	}
 }
 
