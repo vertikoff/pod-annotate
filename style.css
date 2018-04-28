@@ -9,6 +9,7 @@ body{
   bottom: 0px;
   width: 20%;
   padding-top: 25px;
+  overflow-y: scroll;
 }
 .media-holder{
   margin: 10px;
@@ -32,6 +33,8 @@ body{
   font-size: 12px;
   vertical-align: top;
   font-weight: bold;
+  max-width: 150px;
+  display: inline-block;
 }
 .episodes{
   height: 200px;

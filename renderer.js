@@ -20,10 +20,27 @@ document.getElementById("close-btn").addEventListener("click", function (e) {
 
 var baseUrl = "http://127.0.0.1:5003";
 var pods = {
-	"name": ["The Daily", "The Tim Ferriss Show"],
+	"name": ["The Daily",
+	         "The Tim Ferriss Show",
+					 "The Bill Simmons Podcast",
+					 "The Knowledge Project with Shane Parrish",
+					 "Invest Like the Best",
+					 "COIN TALK",
+					 "The Joe Rogan Experience"],
 	"image": ["https://dfkfj8j276wwv.cloudfront.net/images/01/1b/f3/d6/011bf3d6-a448-4533-967b-e2f19e376480/7fdd4469c1b5cb3b66aa7dcc9fa21f138efe9a0310a8a269f3dcd07c83a552844fcc445ea2d53db1e55d6fb077aeaa8a1566851f8f2d8ac4349d9d23a87a69f5.jpeg",
-						"https://dfkfj8j276wwv.cloudfront.net/images/69/10/10/fb/691010fb-625e-4abe-993c-a57228b28dbe/91cb53ae0d5dbb379b9dffecf0a772593891d0d09bbe6d90ee746edbdb79e3ec75584f2ceb8260e9f675a90c05419b9b99842a76905b686f0f51c1a9d3e227ab.jpeg"],
-	"feed": ["https://rss.art19.com/the-daily", "http://timferriss.libsyn.com/rss"]
+						"https://dfkfj8j276wwv.cloudfront.net/images/69/10/10/fb/691010fb-625e-4abe-993c-a57228b28dbe/91cb53ae0d5dbb379b9dffecf0a772593891d0d09bbe6d90ee746edbdb79e3ec75584f2ceb8260e9f675a90c05419b9b99842a76905b686f0f51c1a9d3e227ab.jpeg",
+						"https://dfkfj8j276wwv.cloudfront.net/images/f3/b2/15/7a/f3b2157a-6c3b-4851-83bb-74a9f9e51acb/032d72a5537ea8cbe4116e2f56c929c3c14ef6f0b6659eee2cd974e394793134ed59a2c3261203ba5f9648fe51af6eda43a11e0590e764b45c45a31391777bc6.jpeg",
+						"http://static.libsyn.com/p/assets/3/9/7/c/397c7ef53c0d1a48/tkp.jpg",
+						"http://static.libsyn.com/p/assets/0/b/c/e/0bce06651e36264f/Invest_Like_The_Best_Podcast_Cover_1400x1400.jpg",
+						"https://media.simplecast.com/podcast/image/4094/1515178339-artwork.jpg",
+						"http://static.libsyn.com/p/assets/7/1/f/3/71f3014e14ef2722/JREiTunesImage2.jpg"],
+	"feed": ["https://rss.art19.com/the-daily",
+					 "http://timferriss.libsyn.com/rss",
+					 "https://rss.art19.com/the-bill-simmons-podcast",
+				 	 "http://theknowledgeproject.libsyn.com/rss",
+					 "http://investlikethebest.libsyn.com/rss",
+					 "https://rss.simplecast.com/podcasts/4094/rss",
+					 "http://joeroganexp.joerogan.libsynpro.com/rss"]
 };
 console.log(pods);
 
@@ -55,7 +72,7 @@ function buildMediaLeftNav(){
 	for(var i=0; i < pods.name.length; i++){
 		html += '<div class="media-holder" data-rss="' + pods.feed[i] + '">';
 		html += '<img class="media-list-img" src="' + pods.image[i] + '">';
-		html += '<span class="media-list-title">' + pods.name[i] + '</span>';
+		html += '<div class="media-list-title">' + pods.name[i] + '</div>';
 		html += '<span class="up-icon-holder"><i class="fas fa-angle-up"></i></span>';
 		html += '<span class="down-icon-holder"><i class="fas fa-cog fa-spin"></i></span>';
 		html += '<div class="episodes"></div>';
